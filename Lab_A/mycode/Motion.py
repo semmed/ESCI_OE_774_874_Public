@@ -1,5 +1,7 @@
 import os
 from datetime import datetime, timezone
+from numpy import pi, cos, sin, log, exp
+import numpy as np
 
 class Motion:
     """A Class for handling motion Data"""
