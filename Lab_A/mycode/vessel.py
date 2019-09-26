@@ -2,11 +2,13 @@ import os
 
 import numpy as np
 
-
+#Changing here as we;;
 
 class Vessel:
 
     """A Class for handling Vessel Specific Data"""
+
+
 
     def __init__(self):
 
@@ -21,7 +23,6 @@ class Vessel:
         self.metadata["sonar"]=str()
         self.metadata["mru"]=list()
         self.metadata["dist_unit"]="m"        
-
 
 
         # Quantitative data
@@ -43,5 +44,7 @@ class Vessel:
         txt += "Positioned system     : %s\n" % (self.metadata["pos_source"])
         txt += "Sonar system          : %s\n" % (self.metadata["sonar"])
         txt += "Motion Reference Unit : %s\n" % (self.metadata["mru"])
+
+        
 
         return txt
