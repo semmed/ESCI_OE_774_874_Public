@@ -28,21 +28,21 @@ def noise_level( SS,SD,fc,bw,verbose):
     # Set the sea state noise level
 
     if SS==0:
-        NL1K=null
+        NL1K=44.5
     elif SS<=0.5:
-        NL1K=null
+        NL1K=50
     elif SS<=1:
-        NL1K=null
+        NL1K=55
     elif SS<=2:
-        NL1K=null
+        NL1K=61.5
     elif SS<=3:
-        NL1K=null
+        NL1K=64.5
     elif SS<=4:
-        NL1K=null
+        NL1K=66.5
     elif SS<=5:
-        NL1K=null
+        NL1K=68.5
     else:
-        NL1K=null
+        NL1K=70
 
 
     ## 2 Determine the upper and lower cutoff frequencies
@@ -68,11 +68,11 @@ def noise_level( SS,SD,fc,bw,verbose):
     
     f=np.zeros(2)
     if bw > fc/10.5:
-        f[0]=null
+        f[0]=(-bw+sqrt(bw**2+4*fc**2))/2
     else:
-        f[0]=null
+        f[0]=fc-bw/2
 
-    f[1]=null
+    f[1]=f[0]+bw
 
     ## Estimate the noise for the lower and upper frequency
 
@@ -97,7 +97,7 @@ def noise_level( SS,SD,fc,bw,verbose):
         # this shipping noise:
 
         if 100<f[i] and f[i]<1000:
-            NLship[i]=NL100-null
+            NLship[i]=NL100-20*log10(f[i]/100)
         
     
         # 1-100 kHz ? Sea surface agitiation is now the dominant factor, unless 
@@ -106,7 +106,7 @@ def noise_level( SS,SD,fc,bw,verbose):
         # APL (1994), it is more accurate but is more complex.
     
         if 1000<f[i] and f[i]<100000:
-            NLss[i]=NL1K-null
+            NLss[i]=NL1K-17*log10(f[i]/1000)
         
     
         # Voluntary Challenge: Implement the 1994 APL model
@@ -115,12 +115,16 @@ def noise_level( SS,SD,fc,bw,verbose):
     ## Noise Level by SS state as estimated by Wenz Curves 
     # (or rather the numerical models on which they are based)
 
+    # Combine the incoherent noise levels Ln using the level sum
+    # SPL=10*log10(10^(L1/10)+10^(L2/10)+...+10^(Ln/10)
+
     # The total NL=(NLship,ave+10*log10(bw)) 'level sum' (NLss,ave+10*log10(bw))
 
     # Combine the incoherent noise levels Ln using the 'level sum'
     # SPL=10*log10(10^(L1/10)+10^(L2/10)+...+10^(Ln/10)
+    
 
-    NL=...
+    NL=10*log10(10**((sum(NLship)/2+10*log10(bw))/10)+10**((sum(NLss)/2+10*log10(bw))/10))
 
     if verbose:
         # Let the user know what was found

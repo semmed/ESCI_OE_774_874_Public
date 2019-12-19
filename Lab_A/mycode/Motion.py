@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timezone
+import matplotlib.pyplot as plt
 from numpy import pi, cos, sin, log, exp
 import numpy as np
 
@@ -51,3 +52,24 @@ class Motion:
             self.heave.append(float(observations[9]))
             count += 1
 
+    def draw(self):
+        print('Drawing Motion Data')
+        plt.figure(figsize=(20, 10))
+        ax1 = plt.subplot(4, 1, 1)
+        plt.plot(self.times, np.degrees(self.yaw))
+        plt.ylabel('Heading [deg] →')
+        ax2 = plt.subplot(4, 1, 2, sharex=ax1)
+        plt.plot(self.times, self.heave)
+        plt.ylabel('Heave [m] →')
+        ax3 = plt.subplot(4, 1, 3, sharex=ax1)
+        plt.plot(self.times, np.degrees(self.roll))
+        plt.ylabel('Roll [deg] →')
+        ax4 = plt.subplot(4, 1, 4, sharex=ax1, sharey=ax3)
+        plt.plot(self.times, np.degrees(self.pitch))
+        plt.ylabel('Pitch [deg] →')
+        plt.xlabel('Time ('+self.metadata['time_basis']+') →')
+        plt.xticks(rotation='60')
+
+        plt.setp(ax1.get_xticklabels(), visible=False)
+        plt.setp(ax2.get_xticklabels(), visible=False)
+        plt.setp(ax3.get_xticklabels(), visible=False)

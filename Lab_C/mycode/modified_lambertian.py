@@ -9,27 +9,25 @@ def modified_lambertian( th, Sb, verbose ):
     # th: depression angle
     # Sb: Bottom backscatter strength (Bottom gain)
 
-    print()
+    print(th)
     # Determine the number of bottom types
-    n_bot=null
+    n_bot=len(Sb[0])
 
     # Convert th to Incidence angles
     # I prefer everything as depression angles, but unfortunately many in the
     # literature mix coordinate systems - we will follow suit...
-    # Note the use of the tile command - look at the python documentation to see what this
-    # function does 
     th=np.tile(pi/2-th,(n_bot,1))    
 
     ## Lambertian component
 
     rough = Sb[1].reshape(n_bot,1)
-    BSl = null
+    BSl = rough+10*log10(cos(th)**2)
 
     ## Specular component
     # Calculate specular contributions from all incidence angles
     spec = Sb[2].reshape(n_bot,1)
     crit = Sb[3].reshape(n_bot,1)
-    BSs=null
+    BSs=spec*(1+cos(pi*(th/crit)))/2
     
     # Determine the range of incidence angles inside the critical angle
     # for all bottom types
@@ -39,7 +37,7 @@ def modified_lambertian( th, Sb, verbose ):
     BSs[~rCA]=0
     
     ## Total Backscatter Angular Response
-    BS=null
+    BS=BSs+BSl
 
     if verbose:
         
@@ -95,4 +93,4 @@ def modified_lambertian( th, Sb, verbose ):
         plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=.5)
         plt.show()
         
-        return BS
+    return BS

@@ -2,7 +2,7 @@ import os
 from datetime import datetime, timezone
 from numpy import pi, cos, sin, log, exp
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 class EchosounderData:
     """A Class for handling Two Way Travel Time Data"""
@@ -51,3 +51,13 @@ class EchosounderData:
             
         self.times=np.asarray(times)
         self.twtts=np.array(twtts)
+     
+    def draw(self):
+        plt.figure(figsize=(10, 10))
+        print('Drawing TWTT Data')
+     # plotting the points  
+        plt.plot(self.times, self.twtts) 
+        plt.title('Two Way Travel Times in [s]') 
+        plt.ylabel('TWTT in [s] →') 
+        plt.xlabel('Time time ('+self.metadata['time_basis']+') →') 
+        plt.xticks(rotation='60')
