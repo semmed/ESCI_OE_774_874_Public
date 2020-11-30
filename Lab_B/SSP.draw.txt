@@ -1,0 +1,35 @@
+    def draw(self, full_profile=False, ax1=False, depth_range=False, ss_range=False, label=True):
+
+        if ax1 == False:
+            fig, ax1 = plt.subplots()   
+            
+        if full_profile:
+            if depth_range == False:
+                depth_range = (min(self.d), max(self.d))
+            if ss_range == False:
+                ss_range = (min(self.c), max(self.c))
+            plt.plot(self.c[0:], self.d[0:])
+        else:
+            if depth_range == False:
+                depth_range = (min(self.d[0:-1]), max(self.d[0:-1]))
+            if ss_range == False:
+                ss_range = (min(self.c[0:-1]), max(self.c[0:-1]))
+            plt.plot(self.c[1:-1], self.d[1:-1])
+            
+        plt.ylim(depth_range)
+        plt.xlim(ss_range)
+        
+        if label:
+            plt.ylabel('← Depth [m]')
+        else:
+            labels = [item.get_text() for item in ax1.get_yticklabels()]
+            empty_string_labels = ['']*len(labels)
+            ax1.set_yticklabels(empty_string_labels)
+            
+        plt.xlabel('Sound Speed [m/s] →')
+        ax1.invert_yaxis()
+        ax1.xaxis.tick_top()
+        ax1.xaxis.set_label_position('bottom')
+        
+        # Set the title from the file name that contained the data
+        ax1.title.set_text(os.path.splitext(self.metadata['name'])[0])
